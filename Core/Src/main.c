@@ -22,11 +22,11 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 typedef enum {
-    CLOCKWISE,
-    COUNTERCLOCKWISE
-} LedMode;
-
-LedMode currentMode = CLOCKWISE;
+    MODE_SLOW = 1000,
+    MODE_MEDIUM = 500,
+    MODE_FAST = 100
+} BlinkRate;
+BlinkRate currentRate = MODE_SLOW;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -103,33 +103,26 @@ int main(void)
 	  /*СВЕТОДИОДЫ МЕНЯЮТ НАПРАВЛЕНИЕ ПО НАЖАТИЮ ПОЛЬЗОВАТЕЛЬСКОЙ КНОПКИ*/
 if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET) {
 	          HAL_Delay(200);
-	          if (currentMode == CLOCKWISE) {
-	                          currentMode = COUNTERCLOCKWISE;
+	          if (currentRate == MODE_SLOW) {
+	                          currentRate = MODE_MEDIUM;
+	                      } else if (currentRate == MODE_MEDIUM) {
+	                          currentRate = MODE_FAST;
 	                      } else {
-	                          currentMode = CLOCKWISE;
-	                      }
+	                          currentRate = MODE_SLOW;
+	                      }}
 	                      while (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET) {
 	                          HAL_Delay(10);
 	                      }
-	                  }
-	                  if (currentMode == CLOCKWISE) {
 	                      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
-	                      HAL_Delay(1000);
+	                      HAL_Delay(currentRate);
 	                      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
-	                      HAL_Delay(1000);
+	                      HAL_Delay(currentRate);
 	                      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	                      HAL_Delay(1000);
-	                  } else {
-	                      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	                      HAL_Delay(1000);
-	                      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
-	                      HAL_Delay(1000);
-	                      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
-	                      HAL_Delay(1000);
-	          }
+	                      HAL_Delay(currentRate);
 	    }
 }
   /* USER CODE END 3 */
+
 
 /**
   * @brief System Clock Configuration
