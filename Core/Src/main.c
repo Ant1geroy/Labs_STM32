@@ -21,7 +21,12 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+typedef enum {
+    CLOCKWISE,
+    COUNTERCLOCKWISE
+} LedMode;
 
+LedMode currentMode = CLOCKWISE;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,19 +100,36 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  /*СВЕТОДИОДЫ ВКЛЮЧАЮТСЯ ТОЛЬКО ПО НАЖАТИЮ ПОЛЬЗОВАТЕЛЬСКОЙ КНОПКИ*/
+	  /*СВЕТОДИОДЫ МЕНЯЮТ НАПРАВЛЕНИЕ ПО НАЖАТИЮ ПОЛЬЗОВАТЕЛЬСКОЙ КНОПКИ*/
 if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET) {
 	          HAL_Delay(200);
-	          HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
-	          HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
-	          HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	  while (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET) {
-	              HAL_Delay(10);
+	          if (currentMode == CLOCKWISE) {
+	                          currentMode = COUNTERCLOCKWISE;
+	                      } else {
+	                          currentMode = CLOCKWISE;
+	                      }
+	                      while (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET) {
+	                          HAL_Delay(10);
+	                      }
+	                  }
+	                  if (currentMode == CLOCKWISE) {
+	                      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
+	                      HAL_Delay(1000);
+	                      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
+	                      HAL_Delay(1000);
+	                      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	                      HAL_Delay(1000);
+	                  } else {
+	                      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	                      HAL_Delay(1000);
+	                      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
+	                      HAL_Delay(1000);
+	                      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
+	                      HAL_Delay(1000);
 	          }
 	    }
 }
   /* USER CODE END 3 */
-}
 
 /**
   * @brief System Clock Configuration
