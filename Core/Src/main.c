@@ -46,7 +46,6 @@
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -64,20 +63,30 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+	uint32_t i;
+	RCC->AHB1ENR|=RCC_AHB1ENR_GPIODEN;
+	GPIOD->MODER = 0x55000000;
+	GPIOD->OTYPER = 0;
+	GPIOD->OSPEEDR = 0;
+	while (1)
+	{
+		GPIOD->ODR = 0xF000;
+		for (i=0; i<500000; i++){}
+		GPIOD->ODR = 0x0000;
+		for (i=0; i<500000; i++){}
+	}
+}
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
 
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
 
   /* Configure the system clock */
-  SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
 
@@ -90,14 +99,10 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
   /* USER CODE END 3 */
-}
 
 /**
   * @brief System Clock Configuration
@@ -139,6 +144,13 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
+
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+
 
 /* USER CODE BEGIN 4 */
 
