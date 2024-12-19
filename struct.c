@@ -1,5 +1,10 @@
 #include <stdio.h>
+#include <windows.h>
 
+void setConsoleOutputCP() 
+{
+    SetConsoleOutputCP(CP_UTF8);
+}
 struct microcontroller
 {
     float clock_speed;
